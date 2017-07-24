@@ -5,7 +5,7 @@ A simple library for object validations
 
 ## Simple example
 
-```scala`
+```scala
 import org.validation.scala._
 import org.validation.scala.matchers._
 
@@ -37,4 +37,4 @@ object Main extends App {
     println(v.message)
   }
 }
-``
+```
