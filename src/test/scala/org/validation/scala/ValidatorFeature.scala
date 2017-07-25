@@ -60,6 +60,73 @@ class ValidatorFeature extends FeatureSpec with Matchers {
       result.size shouldBe 1
       result should contain(Violation("sorry, you must be a software engineer"))
     }
+
+    scenario("with one to one relationship") {
+      import org.validation.scala._
+      import org.validation.scala.matchers._
+
+      case class Person(name: String, age: Int, occupation: String, address: Address)
+      case class Address(address: String)
+
+      implicit val addressValidator = Validator { address: Address =>
+        assure(address.address == "haha") {
+          "address field must be 'haha'"
+        }
+      }
+
+      implicit val personValidator = Validator { person: Person =>
+        assure(person.name is notBlank) {
+          "name cannot be empty or null"
+        } ~ assureEntity {
+          person.address
+        } ~ assure(person.age is higherThan(17)) {
+          "age cannot be lower than 18"
+        } ~ assure(person.occupation is equalTo("Software Engineer")) {
+          "sorry, you must be a software engineer"
+        }
+      }
+
+      val result = validate(Person("Gabriel", 24, "Lawyer", Address("hoho")))
+
+      result.size shouldBe 2
+      result should contain(Violation("sorry, you must be a software engineer"))
+      result should contain(Violation("address field must be 'haha'"))
+    }
+
+    scenario("with one to many relationship") {
+      import org.validation.scala._
+      import org.validation.scala.matchers._
+
+      case class Person(name: String, age: Int, occupation: String, addresses: List[Address])
+      case class Address(address: String)
+
+      implicit val addressValidator = Validator { address: Address =>
+        assure(address.address == "haha") {
+          s"address field must be 'haha', not '${address.address}'"
+        }
+      }
+
+      implicit val personValidator = Validator { person: Person =>
+        assure(person.name is notBlank) {
+          "name cannot be empty or null"
+        } ~ assureEntities {
+          person.addresses
+        } ~ assure(person.age is higherThan(17)) {
+          "age cannot be lower than 18"
+        } ~ assure(person.occupation is equalTo("Software Engineer")) {
+          "sorry, you must be a software engineer"
+        }
+      }
+
+      val result = validate(Person("Gabriel", 24, "Lawyer", List(Address("hoho"), Address("hehe"), Address("haha"))))
+
+      println(result)
+
+      result.size shouldBe 3
+      result should contain(Violation("sorry, you must be a software engineer"))
+      result should contain(Violation("address field must be 'haha', not 'hoho'"))
+      result should contain(Violation("address field must be 'haha', not 'hehe'"))
+    }
   }
 
 }

@@ -15,16 +15,30 @@ package object scala {
 
   implicit class ListValidation(list: List[Validation]) {
     def ~(x: Validation): List[Validation] = new ::(x, list)
+
+    def ~(x: List[Validation]): List[Validation] = list ::: x
   }
 
   implicit class SingleValidationImplicit(v: Validation) {
     def ~(x: Validation): List[Validation] = v :: x :: Nil
+
+    def ~(x: List[Validation]): List[Validation] = v :: x
   }
 
   implicit def singleValidationAsList(v: Validation): List[Validation] = List(v)
 
   def assure(check: Boolean)(violationMessage: => String): Validation = {
     new Validation(check, violationMessage)
+  }
+
+  def assureEntity[T](entity: => T)(implicit entityValidator: Validator[T]): List[Validation] = {
+    entityValidator.validate(entity)
+  }
+
+  def assureEntities[T](entities: => List[T])(implicit entityValidator: Validator[T]): List[Validation] = {
+    entities.flatMap { entity =>
+      assureEntity(entity)
+    }
   }
 
   implicit class AnyMatchers(obj: Any) {
@@ -42,4 +56,5 @@ package object scala {
   implicit class IntMatchers(obj: Int) {
     def is(exp: => ValidationMatcher[Int]): Boolean = exp(obj)
   }
+
 }

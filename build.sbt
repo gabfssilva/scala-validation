@@ -1,5 +1,5 @@
 name := "core"
-version := "0.0.1"
+version := "0.0.2"
 organization := "org.scala.validation"
 scalaVersion := "2.12.2"
 
