@@ -3,6 +3,14 @@ A simple library for object validations
 
 #### This library is under development, so, any help is welcome. ;)
 
+## Set up
+
+```scala
+resolvers += "Scala Validation Releases" at "http://dl.bintray.com/scala-validation/releases"
+
+libraryDependencies += "org.scala.validation" %% "core" % "0.0.1"
+```
+
 ## Simple example
 
 ```scala
