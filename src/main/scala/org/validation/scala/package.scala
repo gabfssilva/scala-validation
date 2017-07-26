@@ -53,12 +53,12 @@ package object scala {
     }
   }
 
-  def assureEntities[T](validatableData: (String, List[T]))(implicit entityValidator: Validator[T]): List[Validation] = {
+  def assureEntities[T](validatableData: (String, Iterable[T]))(implicit entityValidator: Validator[T]): List[Validation] = {
     val (basePath, entities) = validatableData
     entities.zipWithIndex.flatMap { elem =>
       val (entity, index) = elem
       assureEntity(s"$basePath[$index]" ~> entity)
-    }
+    }.toList
   }
 
   implicit class AnyMatchers(obj: Any) {

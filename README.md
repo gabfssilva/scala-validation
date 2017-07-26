@@ -10,7 +10,7 @@ A simple library for object validations
 ```scala
 resolvers += "Scala Validation Releases" at "http://dl.bintray.com/scala-validation/releases"
 
-libraryDependencies += "org.scala.validation" %% "core" % "0.0.3"
+libraryDependencies += "org.scala.validation" %% "core" % "0.0.4"
 ```
 
 ## Simple example
@@ -82,21 +82,29 @@ If you need to, you can provide "paths" to help you find where the violation occ
 
 Basically, the semantics are:
 
+```scala
 //for a single value
 assure("path" ~> boolean) { violationMessage }
-
+```
+```scala
 //for another entity
 assureEntity { "path" ~> entity }
+```
 
-//for a list
+```scala
+//for an iterable
 assureEntities { "path" ~> entities }
+```
 
+```scala
 //base path on declaring a validator
 Validator("basePath") { entity: T => ... }
+```
 
+```scala
 //or on validating:
-
 validate("basePath" ~> entity)
+```
 
 ### Example:
 
