@@ -12,7 +12,7 @@ package object scala {
         validator
           .validate(entity)
           .filter(!_.validationExpression)
-          .map(v => Violation(v.violationMessage, None))
+          .map(v => Violation(v.violationMessage, v.fieldPath))
 
       case (path, entity) =>
         val v = Validator(path) { obj: T =>

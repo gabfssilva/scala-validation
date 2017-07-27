@@ -10,7 +10,7 @@ A simple library for object validations
 ```scala
 resolvers += "Scala Validation Releases" at "http://dl.bintray.com/scala-validation/releases"
 
-libraryDependencies += "org.scala.validation" %% "core" % "0.0.4"
+libraryDependencies += "org.scala.validation" %% "core" % "0.0.5"
 ```
 
 ## Simple example
